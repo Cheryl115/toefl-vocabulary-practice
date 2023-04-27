@@ -6,9 +6,12 @@ import tkinter as tk
 import csv
 import random
 from random import shuffle
+from PIL import Image, ImageTk
+from tkmacosx import Button
+import time
 
 window = tk.Tk()
-window.title('Practice')
+window.title('TOEFL vocabulary Practice')
 window.geometry('500x500')
 vocs = []
 
@@ -23,18 +26,21 @@ with open('voc.csv', 'r',encoding="UTF-8") as csvfile:
     
 csvfile.close
 
+frame = tk.Frame(window)
+frame.pack(pady=24)
+
 var = tk.StringVar()    # 这时文字变量储存器
-vocabulary = tk.Label(window, textvariable=var, font=('Noto Sans TC', 14)) # 使用 textvariable 替换 text, 因为这个可以变化
-vocabulary.pack()
+voc = tk.Label(frame, textvariable=var, font=('Noto Sans TC', 14)) # 使用 textvariable 替换 text, 因为这个可以变化
+voc.grid(row=0,column=0,columnspan=2)
 
 var1 = tk.StringVar()    # 这时文字变量储存器
-pos = tk.Label(window, textvariable=var1, font=('Noto Sans TC', 14)) # 使用 textvariable 替换 text, 因为这个可以变化
-pos.pack()
-
+pos = tk.Label(frame, textvariable=var1, font=('Noto Sans TC', 14)) # 使用 textvariable 替换 text, 因为这个可以变化
+pos.grid(row=1, column=0)
 
 var2 = tk.StringVar()    # 这时文字变量储存器
-meaning = tk.Label(window, textvariable=var2, font=('Noto Sans TC', 14)) # 使用 textvariable 替换 text, 因为这个可以变化
-meaning.pack()
+meaning = tk.Label(frame, textvariable=var2, font=('Noto Sans TC', 14)) # 使用 textvariable 替换 text, 因为这个可以变化
+meaning.grid(row=1,column=1)
+
 
 text = tk.StringVar()
 text.set('Start')
@@ -67,12 +73,25 @@ def btn1_click():
         
 
 # 第5步，在視窗介面設定放置Button按鍵
-b1 = tk.Button(window, textvariable=text , font=('Noto Sans TC', 14), width=10, height=1, command=btn1_click)
-b1.pack()
+b1 = Button(window, 
+               textvariable=text, 
+               font=('Noto Sans TC', 14), 
+               padx=12, pady=4, 
+               borderwidth=0,
+               focuscolor='',
+               fg='#0B1013',
+               bg='#81C7D4',
+               activebackground='#51A8DD',
+               activeforeground='#0B1013',
+               command=btn1_click,
+               borderless=1)
+b1.pack(pady=24)
 
 canvas = tk.Canvas(window, height=500, width=500)
-image_file = tk.PhotoImage(file='tensai_girl.png')
-image = canvas.create_image(250, 0, anchor='n',image=image_file)
+image_file = Image.open('tensai_girl.png')
+resiged_img = image_file.resize((200,187))
+img = ImageTk.PhotoImage(resiged_img)
+image = canvas.create_image(250, 0, anchor='n',image=img)
 canvas.pack()
 
 window.mainloop()
